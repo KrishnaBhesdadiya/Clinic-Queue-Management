@@ -1,0 +1,45 @@
+﻿@model List<Clinic>
+@{
+    Layout = "_AdminLayout";
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<main role="main" class="main p-4">
+
+    <h3 class="fw-bold mb-4" style="color:#0f6d63">My Clinic</h3>
+
+    @foreach (var clinic in Model)
+    {
+        <div class="card shadow-sm border-0 mb-3" style="max-width: 800px; border-radius: 8px;">
+            <div class="card-body p-4">
+
+                <h5 class="fw-bold mb-3">
+                    @Frontend_Exam.Services.CommonVariables.ClinicName()
+                </h5>
+
+                <div class="mb-4">
+                    <span class="fw-bold">Clinic code:</span>
+                    <span class="ms-1 px-1" style="background-color: #e9ecef;">
+                        @Frontend_Exam.Services.CommonVariables.ClinicCode()
+                    </span>
+                </div>
+
+                <p class="text-muted mb-3">
+                    Share this code with patients, doctors, and receptionists so they can register and join your clinic.
+                </p>
+
+                <p class="mb-0">
+                    <span class="text-muted">Users:</span> @clinic.userCount
+                    <span class="mx-2 text-muted">·</span>
+                    <span class="text-muted">Appointments:</span> @clinic.appointmentCount
+                </p>
+
+            </div>
+        </div>
+    }
+
+</main>

@@ -1,0 +1,142 @@
+﻿@model List<ClinicUser>
+@{
+    Layout = "_AdminLayout";
+}
+@{
+    ViewData["Title"] = "Clinic Users";
+}
+<style>
+    .btn-teal {
+        background-color: #0f6d63;
+        color: white;
+        border: none;
+    }
+
+        .btn-teal:hover {
+            background-color: #0a4d46;
+            color: white;
+        }
+
+    .badge-role {
+        background-color: #e3f2fd;
+        color: #0d6efd;
+        border-radius: 4px;
+        font-weight: 500;
+        padding: 4px 8px;
+    }
+
+    .table thead th {
+        border-top: none;
+        color: #6c757d;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.4rem;
+    }
+</style>
+<main role="main" class="main p-4">
+<h3 class="fw-bold mb-4" style="color:#0f6d63">My Clinic</h3>   
+
+<!-- ✅ Add User Form -->
+<div class="card shadow-sm border-0 mb-3" style="border-radius: 8px;">
+    <div class="card-body p-4">
+
+        <h5 class="fw-bold">Add receptionist, doctor or patient</h5>
+        <p class="text-muted mb-3">
+            Create a user in you clinic. They will sign in with the email and password you set (no registration).</p>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert border-0 py-2" style="background-color: #d1f7e3; color: #0f6d63; border-radius: 6px;">
+                    <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+                </div>
+            }
+            <form method="post" asp-controller="Admin" asp-action="AddUser">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Name</label>
+                        <input type="text" name="name" class="form-control" placeholder="At least 3 characters" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" />
+                    </div>
+                    <div class="col-md-4"></div> <div class="col-md-4">
+                        <label class="form-label">Password</label>
+                        <input type="password" name="password" class="form-control" placeholder="Min 6 characters" />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="patient">Patient</option>
+                            <option value="receptionist">Receptionist</option>
+                            <option value="doctor">Doctor</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Phone (optional)</label>
+                        <input type="text" name="phone" class="form-control" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-teal mt-4 px-4 py-2">Add user</button>
+            </form>
+
+        @* <form method="post" asp-action="AddUser">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <input name="name" placeholder="Name" required />
+                <input name="email" placeholder="Email" required />
+                <input name="password" placeholder="Password" type="password" required />
+
+                <select name="role">
+                    <option value="doctor">Doctor</option>
+                    <option value="receptionist">Receptionist</option>
+                    <option value="patient">Patient</option>
+                </select>
+
+                <input name="phone" placeholder="Phone" />
+            </div>
+
+            <br />
+            <button type="submit">Add User</button>
+        </form> *@
+    </div>
+</div>
+<!-- ✅ Users Table -->
+    <div class="card shadow-sm border-0" style="border-radius: 10px;">
+        <div class="card-body p-4">
+            <h5 class="fw-bold mb-4">Users in this clinic</h5>
+
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.name</td>
+                                <td class="text-muted">@user.email</td>
+                                <td><span class="badge-role small">@user.role</span></td>
+                                <td class="text-muted">@(string.IsNullOrEmpty(user.phone) ? "—" : user.phone)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+@if (TempData["Error"] != null)
+{
+    <p style="color:red;">@TempData["Error"]</p>
+}
